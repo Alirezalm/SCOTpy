@@ -1,18 +1,16 @@
 import json
 import os
 import pathlib
-import random
-from re import T
 import shutil
 import subprocess
 from dataclasses import dataclass
-from enum import Enum
-from tabnanny import verbose
 from typing import List
 
 from numpy import ndarray
-from sklearn.datasets import make_classification
 from sklearn.preprocessing import normalize
+
+from scotpy_decorators import validate_arguments
+from scotpy_types import ProblemType, AlgorithmType
 
 HOME = os.environ.get("HOME", "")
 ROOT = "scotpy"
@@ -21,19 +19,11 @@ WORKING_DIR = os.path.join(HOME, ROOT)
 pathlib.Path(WORKING_DIR).mkdir(exist_ok=True)
 
 
-class ProblemType(Enum):
-    CLASSIFICATION = 0
-    REGRESSION = 1
-
-
-class AlgorithmType(Enum):
-    DIPOA = 0
-    DIHOA = 1
-
-
 class ScotModel:
 
+    @validate_arguments
     def __init__(self, problem_name: str, rank: int, kappa: int, ptype: ProblemType = ProblemType.CLASSIFICATION):
+
         self.name = problem_name
         self.rank = rank
         self.ptype = ptype
