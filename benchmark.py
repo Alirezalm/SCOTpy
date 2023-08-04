@@ -139,9 +139,9 @@ class MINLP:
             solver_str = solver_name
 
         try:
-            res = solver.solve(self.model, solver = solver_str, tee = verbose, keepfiles = False,
-                               load_solutions = False,
-                               add_options = options)
+            res = solver.solve(self.model, solver=solver_str, tee=verbose, keepfiles=False,
+                               load_solutions=False,
+                               add_options=options)
             elapsed_time = res.solver.user_time
             status = res.solver.termination_condition
             gap = res.solution.gap
@@ -167,9 +167,9 @@ class MINLP:
         self.model = ConcreteModel()
 
         self.model.x = Var(range(self.n_features))
-        self.model.delta = Var(range(self.n_features), within = Binary)
+        self.model.delta = Var(range(self.n_features), within=Binary)
 
-        self.model.obj = Objective(expr = self.__objective(), sense = minimize)
+        self.model.obj = Objective(expr=self.__objective(), sense=minimize)
 
         self.model.limits = ConstraintList()
         for i in range(self.n_features):
@@ -260,10 +260,10 @@ class Benchmark:
         if solver == Solvers.SCOT:
 
             scot_settings = ScotSettings(
-                relative_gap = settings.rgap,
-                time_limit = settings.tlim,
-                verbose = settings.verbose,
-                algorithm = AlgorithmType.DIPOA
+                relative_gap=settings.rgap,
+                time_limit=settings.tlim,
+                verbose=settings.verbose,
+                algorithm=AlgorithmType.DIPOA
             )
 
             success = self.__run_scot(scot_settings)
@@ -274,17 +274,17 @@ class Benchmark:
         elif solver == Solvers.SCOTH:
 
             scot_settings = ScotSettings(
-                relative_gap = settings.rgap,
-                time_limit = settings.tlim,
-                verbose = settings.verbose,
-                algorithm = AlgorithmType.DIHOA
+                relative_gap=settings.rgap,
+                time_limit=settings.tlim,
+                verbose=settings.verbose,
+                algorithm=AlgorithmType.DIHOA
             )
             success = self.__run_scot(scot_settings)
             print(
                 Colors.UNDERLINE + Colors.OKBLUE + Colors.BOLD + f"{solver.name} -> Number of problem solved: {success} / {self.n_problems}" + Colors.ENDC)
             return success
         else:
-            success = self.__run_gms_solver(solver = solver, settings = settings)
+            success = self.__run_gms_solver(solver=solver, settings=settings)
             print(f"{solver.value} -> Number of problem solved: {success} / {self.n_problems}")
             return success
 
@@ -294,10 +294,10 @@ class Benchmark:
         for i in range(self.n_problems):
             filename = self.pname + "_" + str(i)
             minlp_solver = MINLP(
-                filepath = path, filename = filename, total_size = self.n_nodes)
-            minlp_solver.create(kappa = self.kappa)
-            return_code = minlp_solver.solve(solver_name = solver.value, time_limit = settings.tlim,
-                                             eps = settings.rgap, verbose = settings.verbose)
+                filepath=path, filename=filename, total_size=self.n_nodes)
+            minlp_solver.create(kappa=self.kappa)
+            return_code = minlp_solver.solve(solver_name=solver.value, time_limit=settings.tlim,
+                                             eps=settings.rgap, verbose=settings.verbose)
 
             if return_code == 0:
                 num_prob_solved += 1
@@ -327,12 +327,12 @@ class Benchmark:
             self.kappa = int(
                 (random_n_vars * self.level_of_sparsity) / 100) + 1
 
-            problem = Benchmark.create_instance(m = random_n_rows,
-                                                n = random_n_vars,
-                                                total_nodes = self.n_nodes,
-                                                pname = self.pname +
-                                                        "_" + str(i),
-                                                kappa = self.kappa,
+            problem = Benchmark.create_instance(m=random_n_rows,
+                                                n=random_n_vars,
+                                                total_nodes=self.n_nodes,
+                                                pname=self.pname +
+                                                      "_" + str(i),
+                                                kappa=self.kappa,
                                                 )
             self.problems.append(problem)
 
@@ -353,10 +353,10 @@ class Benchmark:
         models: List[ScotModel] = []
         for rank in range(total_nodes):
             dataset, res = make_classification(
-                n_samples = m, n_features = n, n_redundant = 0, n_repeated = 0)
-            scp = ScotModel(problem_name = pname, rank = rank,
-                            kappa = kappa, ptype = ProblemType.CLASSIFICATION)
-            scp.set_data(dataset, res, normalized_data = True)
+                n_samples=m, n_features=n, n_redundant=0, n_repeated=0)
+            scp = ScotModel(problem_name=pname, rank=rank,
+                            kappa=kappa, ptype=ProblemType.CLASSIFICATION)
+            scp.set_data(dataset, res, normalized_data=True)
             scp.create()
             models.append(scp)
 
@@ -383,14 +383,14 @@ class TimeBenchmark:
         self.bench_settings = bench_settings
 
         self.benchmark = Benchmark(
-            max_num_var = self.bench_settings.max_n,
-            min_num_var = self.bench_settings.min_n,
-            max_num_row = self.bench_settings.max_m,
-            min_num_row = self.bench_settings.min_m,
-            n_nodes = self.bench_settings.n_nodes,
-            n_problems = self.bench_settings.n_problems,
-            pname = self.bench_settings.name,
-            level_of_sparsity = self.bench_settings.density_level,
+            max_num_var=self.bench_settings.max_n,
+            min_num_var=self.bench_settings.min_n,
+            max_num_row=self.bench_settings.max_m,
+            min_num_row=self.bench_settings.min_m,
+            n_nodes=self.bench_settings.n_nodes,
+            n_problems=self.bench_settings.n_problems,
+            pname=self.bench_settings.name,
+            level_of_sparsity=self.bench_settings.density_level,
         )
         self.default_time = None
 
@@ -411,24 +411,24 @@ class TimeBenchmark:
                 if num_prob_solved == self.bench_settings.n_problems:
                     benchmark_results[solver.value].append(num_prob_solved)
                 else:
-                    solver_settings = SolverSettings(rgap = self.bench_settings.solver_gap,
-                                                     tlim = time,
-                                                     verbose = self.bench_settings.verbose)
+                    solver_settings = SolverSettings(rgap=self.bench_settings.solver_gap,
+                                                     tlim=time,
+                                                     verbose=self.bench_settings.verbose)
 
-                    num_prob_solved = self.benchmark.run(solver = solver, settings = solver_settings)
+                    num_prob_solved = self.benchmark.run(solver=solver, settings=solver_settings)
 
                     benchmark_results[solver.value].append(num_prob_solved)
 
             benchmark_results["time"] = self.default_time
-            self.__to_json(benchmark_res = benchmark_results)
+            self.__to_json(benchmark_res=benchmark_results)
         return benchmark_results
 
     def __to_json(self, benchmark_res: Dict):
 
         json_string = json.dumps(benchmark_res,
-                                 sort_keys = True,
-                                 indent = 4,
-                                 separators = (',', ': '))
+                                 sort_keys=True,
+                                 indent=4,
+                                 separators=(',', ': '))
 
         res_json = f"results_n_{self.bench_settings.max_n}_p_{self.bench_settings.n_problems}_m_{self.bench_settings.max_m * self.bench_settings.n_nodes}.json"
 
@@ -447,7 +447,7 @@ class TimeBenchmark:
         fig, ax = plt.subplots()
 
         for solver, result in results.items():
-            ax.plot(self.default_time, result, label = solver)
+            ax.plot(self.default_time, result, label=solver)
 
         ax.legend()
         ax.set_xlabel("time (seconds)")
@@ -463,38 +463,38 @@ def plot_results_from_file(filename: str):
     fs = 10
     markers = ["o", "s", "*", "h", "+", "x", "D"]
     colors = ['midnightblue', 'mediumslateblue', 'mediumorchid', 'mediumseagreen', 'slategray', 'olive', 'red']
-    fig, ax = plt.subplots(figsize = (5, 4))
+    fig, ax = plt.subplots(figsize=(5, 4))
     i = 0
     for key, res in results.items():
         if key != "time":
-            ax.step(results["time"], res, label = key, marker = markers[i], markersize = 4, color = colors[i])
+            ax.step(results["time"], res, label=key, marker=markers[i], markersize=4, color=colors[i])
             # ax.yaxis.set_major_locator(MaxNLocator(integer = True))
         ax.set_yticks(range(0, 20 + 1, 2))
         i += 1
-    plt.legend(bbox_to_anchor = (0, 1.02, 1, 0.2), loc = "lower left",
-               mode = "expand", borderaxespad = 0, ncol = 4, fontsize = fs)
-    ax.set_xlabel("time (seconds)", fontsize = fs)
-    ax.set_ylabel("number of problems", fontsize = fs)
+    plt.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
+               mode="expand", borderaxespad=0, ncol=4, fontsize=fs)
+    ax.set_xlabel("time (seconds)", fontsize=fs)
+    ax.set_ylabel("number of problems", fontsize=fs)
     plt.grid()
     figname = filename.split(".")[0] + ".pdf"
-    plt.savefig(f"./figs/{figname}", format = "pdf")
+    plt.savefig(f"./figs/{figname}", format="pdf")
 
     # plt.show()
 
 
 if __name__ == '__main__':
     bs = BenchmarkSettings(
-        max_t = 50,
-        max_n = 100,
-        max_m = 75000,
-        min_n = 20,
-        min_m = 1000,
-        density_level = 20,
-        n_problems = 20,
-        n_nodes = 4,
-        name = "benchmark_2",
-        verbose = False,
-        solver_gap = 1e-3
+        max_t=50,
+        max_n=100,
+        max_m=1500,
+        min_n=20,
+        min_m=1000,
+        density_level=20,
+        n_problems=20,
+        n_nodes=4,
+        name="benchmark_2",
+        verbose=False,
+        solver_gap=1e-3
     )
     tm = TimeBenchmark(bs)
     result = tm.run()
