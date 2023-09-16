@@ -11,8 +11,7 @@ For more detailed information about the `SCOT` solver, including compilation ins
 **SCOT** is compatible with the following platforms:
 
 1. Ubuntu 20.04 or higher
-2. macOS
-3. Windows Subsystem for Linux (WSL2)
+2. Windows Subsystem for Linux (WSL2)
 
 ### Dependencies
 
@@ -25,6 +24,12 @@ To set up **SCOT**, you need the following prerequisites:
    - [MPICH](https://www.mpich.org/)
    - [Microsoft MPI (for Windows)](https://docs.microsoft.com/en-us/message-passing-interface/microsoft-mpi)
 4. See ```requirements.txt``` for other dependencies.
+
+### Install
+Run the following command to install ```scotpy```
+```commandline
+pip install scotpy
+```
 
 ### Usage
  See [dslr.ipynb](./examples/dslr.ipynb)
