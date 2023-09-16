@@ -8,7 +8,28 @@ from typing import List
 from numpy import ndarray
 from sklearn.preprocessing import normalize
 from numpy import array
-from scotpy_types import ProblemType, AlgorithmType, ScotSettings
+from dataclasses import dataclass
+from enum import Enum
+
+
+class ProblemType(Enum):
+    CLASSIFICATION = 0
+    REGRESSION = 1
+
+
+class AlgorithmType(Enum):
+    DIPOA = 0
+    DIHOA = 1
+
+
+@dataclass
+class ScotSettings:
+    algorithm: AlgorithmType = AlgorithmType.DIPOA
+    time_limit: float = 1e10
+    relative_gap: float = 1e-5
+    verbose: bool = True
+    ub: float = 1e3
+
 
 HOME = os.environ.get("HOME", "")
 
@@ -147,22 +168,22 @@ class ScotPy:
         self.models = models
         self.settings = settings
         self.cmd_args = []
-        if os.environ.get("SCOT_HOME", "") == "":
+        if not shutil.which("scot"):
             raise ScotPyException(
-                "Solver path is unknown. make sure the executable is in the system path.")
-
+                "scot executable is not in the OS path. make sure scot is installed correctly."
+            )
         if os.environ.get("GUROBI_HOME", "") == "":
             raise ScotPyException(
-                "gurobi path is unknown. make sure GUROBI_HOME is in the system path."
+                "gurobi path is unknown. make sure GUROBI_HOME is defined."
             )
 
-        self.scot_path = os.environ.get("SCOT_HOME", "")
+        self.scot_path = os.environ.get("SCOT_BIN", "")
         self.total_size = len(models)
 
         self.__generate_mpi_cmd()
 
     def run(self):
-        # print(" ".join(self.cmd_args))
+        print(" ".join(self.cmd_args))
         command_return = subprocess.run(self.cmd_args)
         return_code = command_return.returncode
         if return_code > 0:
@@ -172,10 +193,10 @@ class ScotPy:
 
     def process_solver_out(self):
         pathlib.Path(os.path.join(WORKING_DIR, OUTPUT)).mkdir(exist_ok=True)
-        current_dir = os.path.dirname(os.path.realpath(__file__))
         output_dir = os.path.join(WORKING_DIR, OUTPUT)
         filename = "rank_0_output.json"
-        out_file = os.path.join(current_dir, filename)
+        out_file = os.path.join("", filename)
+
         try:
             shutil.copy(out_file, os.path.join(output_dir, self.models[0].name + filename))
 
