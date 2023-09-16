@@ -166,20 +166,33 @@ class ScotPy:
         # print(" ".join(self.cmd_args))
         command_return = subprocess.run(self.cmd_args)
         return_code = command_return.returncode
+        if return_code > 0:
+            raise ScotPyException("SCOT FAILED")
+
+        execution_time, objval, solution = self.process_solver_out()
+
+        return objval, solution, execution_time
+
+    def process_solver_out(self):
         pathlib.Path(os.path.join(WORKING_DIR, OUTPUT)).mkdir(exist_ok=True)
         current_dir = os.path.dirname(os.path.realpath(__file__))
         output_dir = os.path.join(WORKING_DIR, OUTPUT)
-
         filename = "rank_0_output.json"
         out_file = os.path.join(current_dir, filename)
-        shutil.copy(out_file, os.path.join(output_dir, self.models[0].name + filename))
-        for i in range(self.total_size):
-            os.remove(f"rank_{i}_output.json")
-        with open(os.path.join(output_dir, self.models[0].name + filename)) as file:
-            opt_result = json.load(file)
-            objval = opt_result["objval"]
-            execution_time = opt_result["time"]
-            solution = array(opt_result["x"], dtype=float)
+        try:
+            shutil.copy(out_file, os.path.join(output_dir, self.models[0].name + filename))
+
+            for i in range(self.total_size):
+                os.remove(f"rank_{i}_output.json")
+
+            with open(os.path.join(output_dir, self.models[0].name + filename)) as file:
+                opt_result = json.load(file)
+                objval = opt_result["objval"]
+                execution_time = opt_result["time"]
+                solution = array(opt_result["x"], dtype=float)
+
+        except Exception as exp:
+            raise ScotPyException(exp)
 
         return objval, solution, execution_time
 
@@ -215,6 +228,7 @@ class ScotPy:
 
         time_limit = self.settings.time_limit
         r_gap = self.settings.relative_gap
+        ub = self.settings.ub
 
         if self.settings.verbose:
             verbose = "--verbose"
@@ -230,7 +244,8 @@ class ScotPy:
                 f"--alg={alg}",
                 f"--tlim={time_limit}",
                 f"--rgap={r_gap}",
-                verbose
+                verbose,
+                f"--ub={ub}"
             ]
         else:
             self.cmd_args = [
@@ -244,6 +259,7 @@ class ScotPy:
                 f"--alg={alg}",
                 f"--tlim={time_limit}",
                 f"--rgap={r_gap}",
+                f"--ub={ub}"
             ]
 
 

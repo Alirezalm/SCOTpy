@@ -18,3 +18,4 @@ class ScotSettings:
     time_limit: float = 1e10
     relative_gap: float = 1e-5
     verbose: bool = True
+    ub: float = 1e3

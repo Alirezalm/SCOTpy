@@ -27,7 +27,8 @@ def main():
         relative_gap=1e-5,
         time_limit=10000,
         verbose=True,
-        algorithm=AlgorithmType.DIPOA
+        algorithm=AlgorithmType.DIPOA,
+        ub=1e2
     )
 
     solver = ScotPy(models, scot_settings)

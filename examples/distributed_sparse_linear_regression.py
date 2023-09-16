@@ -31,12 +31,15 @@ def main():
     scot_settings = ScotSettings(
         relative_gap=1e-4,
         time_limit=10000,
-        verbose=True,
-        algorithm=AlgorithmType.DIHOA
+        verbose=False,
+        algorithm=AlgorithmType.DIHOA,
+        ub=1
+
     )
 
     solver = ScotPy(models, scot_settings)
     objval, solution, execution_time = solver.run()
+
     print(f"Optimal Objective Value: {objval}")
     print(f"Optimal Solution: {solution}")
     print(f"Execution Time: {execution_time} seconds")
