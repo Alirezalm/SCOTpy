@@ -17,10 +17,10 @@ def main():
     models: List[ScotModel] = []
 
     for rank in range(total_nodes):
-        dataset, res = make_regression(n_samples=200, n_features=30)
+        dataset, res = make_regression(n_samples=200, n_features=40)
 
         scp = ScotModel(problem_name="linear_regression", rank=rank,
-                        kappa=5, ptype=ProblemType.REGRESSION)
+                        kappa=20, ptype=ProblemType.REGRESSION)
 
         scp.set_data(dataset, res, normalized_data=True)
 
@@ -32,11 +32,14 @@ def main():
         relative_gap=1e-4,
         time_limit=10000,
         verbose=True,
-        algorithm=AlgorithmType.DIPOA
+        algorithm=AlgorithmType.DIHOA
     )
 
     solver = ScotPy(models, scot_settings)
-    solver.run()
+    objval, solution, execution_time = solver.run()
+    print(f"Optimal Objective Value: {objval}")
+    print(f"Optimal Solution: {solution}")
+    print(f"Execution Time: {execution_time} seconds")
 
 
 if __name__ == '__main__':

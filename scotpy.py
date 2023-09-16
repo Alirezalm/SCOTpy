@@ -7,7 +7,7 @@ from typing import List
 
 from numpy import ndarray
 from sklearn.preprocessing import normalize
-
+from numpy import array
 from scotpy_decorators import validate_arguments
 from scotpy_types import ProblemType, AlgorithmType, ScotSettings
 
@@ -15,6 +15,7 @@ HOME = os.environ.get("HOME", "")
 
 ROOT = "scotpy"
 INPUT = "inputs"
+OUTPUT = "output"
 
 WORKING_DIR = os.path.join(HOME, ROOT)
 
@@ -164,7 +165,23 @@ class ScotPy:
     def run(self):
         # print(" ".join(self.cmd_args))
         command_return = subprocess.run(self.cmd_args)
-        return command_return.returncode
+        return_code = command_return.returncode
+        pathlib.Path(os.path.join(WORKING_DIR, OUTPUT)).mkdir(exist_ok=True)
+        current_dir = os.path.dirname(os.path.realpath(__file__))
+        output_dir = os.path.join(WORKING_DIR, OUTPUT)
+
+        filename = "rank_0_output.json"
+        out_file = os.path.join(current_dir, filename)
+        shutil.copy(out_file, os.path.join(output_dir, self.models[0].name + filename))
+        for i in range(self.total_size):
+            os.remove(f"rank_{i}_output.json")
+        with open(os.path.join(output_dir, self.models[0].name + filename)) as file:
+            opt_result = json.load(file)
+            objval = opt_result["objval"]
+            execution_time = opt_result["time"]
+            solution = array(opt_result["x"], dtype=float)
+
+        return objval, solution, execution_time
 
     def __generate_mpi_cmd(self):
         mpi_path = None
