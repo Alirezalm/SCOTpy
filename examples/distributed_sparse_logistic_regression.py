@@ -2,12 +2,12 @@ from typing import List
 
 from sklearn.datasets import make_classification
 
-from scotpy import (AlgorithmType,
-                    ProblemType,
-                    ScotModel,
-                    ScotPy,
-                    ScotSettings
-                    )
+from scotpy.scotpy import (AlgorithmType,
+                           ProblemType,
+                           ScotModel,
+                           ScotPy,
+                           ScotSettings
+                           )
 
 
 def main():
