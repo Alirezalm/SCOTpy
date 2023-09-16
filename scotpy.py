@@ -8,7 +8,6 @@ from typing import List
 from numpy import ndarray
 from sklearn.preprocessing import normalize
 from numpy import array
-from scotpy_decorators import validate_arguments
 from scotpy_types import ProblemType, AlgorithmType, ScotSettings
 
 HOME = os.environ.get("HOME", "")

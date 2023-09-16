@@ -11,7 +11,6 @@ from scotpy import (AlgorithmType,
 
 
 def main():
-
     total_nodes = 4
 
     models: List[ScotModel] = []
