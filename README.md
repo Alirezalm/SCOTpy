@@ -27,4 +27,4 @@ To set up **SCOT**, you need the following prerequisites:
 4. See ```requirements.txt``` for other dependencies.
 
 ### Usage
- See examples.
+ See [dslr.ipynb](./examples/dslr.ipynb)
