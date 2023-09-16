@@ -168,9 +168,7 @@ class ScotPy:
         if return_code > 0:
             raise ScotPyException("SCOT FAILED")
 
-        execution_time, objval, solution = self.process_solver_out()
-
-        return objval, solution, execution_time
+        return self.process_solver_out()
 
     def process_solver_out(self):
         pathlib.Path(os.path.join(WORKING_DIR, OUTPUT)).mkdir(exist_ok=True)
