@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scotpy"
+version = "1.0.0"
+description = "SCOT solver python api"
+readme = "README.md"
+authors = [{ name = "Alireza Olama", email = "alireza.lm69@gmail.com" }]
+license = { file = "LICENSE" }
+
+dependencies = [
+    "numpy",
+    "scikit-learn",
+    "scipy",
+    "matplotlib",
+    "pyomo",
+]
+requires-python = ">=3.7"
+
+
+[project.urls]
+Homepage = "https://github.com/alirezalm/scotpy"
